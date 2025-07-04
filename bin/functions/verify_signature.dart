@@ -7,7 +7,7 @@ verifySignature({required List<int> message, required List<int> publicKey, requi
   return algorithm.verify(message, signature: Signature(signature, publicKey: SimplePublicKey(publicKey, type: KeyPairType.ed25519)));
 }
 
-genNonce() async {
+genNonce() {
   final Uint8List nonce = Uint8List.fromList(List.generate(32, (_) => Random.secure().nextInt(256)));
   return nonce;
 }
