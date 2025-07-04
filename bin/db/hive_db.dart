@@ -14,14 +14,18 @@ class HiveDb {
   }
 
   static Future<void> sendMessageToBusstop({required String recepient, required List<int> message}) async {
-    Message? messages = await _busstopBox.get(recepient);
-    if (messages == null) {
-      await _busstopBox.put(recepient, Message(
-        base58X25519RecepientPubkey: recepient,
-        message: [message]));
+    try {
+      Message? messages = await _busstopBox.get(recepient);
+      if (messages == null) {
+        await _busstopBox.put(recepient, Message(
+          base58X25519RecepientPubkey: recepient,
+          message: [message]));
+      }
+      messages?.message.add(message);
+      await _busstopBox.put(recepient, messages);
+    } catch (_) {
+      
     }
-    messages?.message.add(message);
-    await _busstopBox.put(recepient, messages);
   }
 
   static Future<List<List<int>>> getMessagesFromBusstop({required String recepient}) async {
